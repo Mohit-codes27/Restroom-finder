@@ -1,0 +1,38 @@
+/* Basic reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Map container styling */
+#map {
+    width: 100%;
+    height: 80vh;
+    margin-bottom: 10px;
+}
+
+/* Button styling */
+#find-Restrooms {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    background-color: #4CAF50; /* Green color */
+    color: white;
+    border-radius: 5px;
+}
+
+#find-Restrooms:hover {
+    background-color: #45a049;
+}
