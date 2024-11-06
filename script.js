@@ -12,8 +12,8 @@ function initMap() {
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 userLocation = {
-                    lat: 28.603160753503026,
-                    lng: 77.04186141285817,
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
                 };
                 map.setCenter(userLocation);
                 new google.maps.Marker({
