@@ -24,12 +24,14 @@ body {
 
 /* Search Box Styling */
 #searchBox {
-    width: 80%;
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
+    padding: 12px;
+    width: 230px;
+    border: none;
+    background-color: #3e3b3b;
+    border-radius: 30px;
+    outline: none;
+    color: white;
+    margin-right: 15px;
 }
 
 /* Button styling */
@@ -46,4 +48,38 @@ body {
 
 #find-Restrooms:hover {
     background-color: #45a049;
+}
+
+.show-direction button{
+    padding: 5px;
+    background-color: green;
+    color: #ffffff;
+    border: 1px solid white;
+    border-radius: 11px;
+}
+
+.show-direction button:hover{
+    background-color: #45a049;
+
+}
+
+.logo{
+    width: 200px;
+    height: 100px;
+    object-fit: contain;
+    margin-right: 0;
+}
+
+.heading{
+    margin-left: 70px;
+}
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* flex-direction: column; */
+    background-color: black;
+    width: 100%;
+    color: white;
 }
