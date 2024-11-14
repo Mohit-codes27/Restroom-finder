@@ -7,8 +7,14 @@ function initMap() {
         zoom: 13,
     });
 
-    // Check if geolocation is available
+    // Check if geolocation is available and get accurate user location
     if (navigator.geolocation) {
+        const geolocationOptions = {
+            enableHighAccuracy: true, // Request a more accurate location
+            timeout: 10000,           // Timeout after 10 seconds if no location is found
+            maximumAge: 0             // Don't use cached location data
+        };
+
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 userLocation = {
@@ -22,9 +28,10 @@ function initMap() {
                     title: "Your Location",
                 });
             },
-            () => {
-                handleLocationError(true, map.getCenter());
-            }
+            (error) => {
+                handleLocationError(true, map.getCenter(), error);
+            },
+            geolocationOptions
         );
     } else {
         // Browser doesn't support Geolocation
@@ -32,21 +39,28 @@ function initMap() {
     }
 }
 
-function handleLocationError(browserHasGeolocation, pos) {
-    console.error(
-        browserHasGeolocation
-            ? "Error: The Geolocation service failed."
-            : "Error: Your browser doesn't support geolocation."
-    );
+function handleLocationError(browserHasGeolocation, pos, error) {
+    if (error && error.code === error.PERMISSION_DENIED) {
+        alert("Location permission denied. Please allow access to location services.");
+    } else if (error && error.code === error.TIMEOUT) {
+        alert("Request for location timed out. Please try again.");
+    } else {
+        alert(
+            browserHasGeolocation
+                ? "Error: The Geolocation service failed."
+                : "Error: Your browser doesn't support geolocation."
+        );
+    }
+    map.setCenter(pos);
 }
 
-// Event listener for the "Show Certified restroom" button
+// Event listener for the "Show Certified Restrooms" button
 document.getElementById("find-Restrooms").addEventListener("click", () => {
     if (userLocation) {
         const request = {
             location: userLocation,
             radius: 1500, // Search within 1.5km
-            type: "restrooms",
+            type: "restroom",
         };
 
         const service = new google.maps.places.PlacesService(map);
