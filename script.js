@@ -1,106 +1,56 @@
-let map, userLocation;
-const retryLimit = 3; // Maximum retry limit for location accuracy
+let map;
+let marker;
 
 function initMap() {
-    // Initialize the map with a default location
+    // Initialize the map at a default location (India)
     map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: 20.5937, lng: 78.9629 }, // Default location (India)
-        zoom: 13,
+        center: { lat: 20.5937, lng: 78.9629 },
+        zoom: 5,
     });
 
-    // Attempt to fetch the user's accurate location
-    fetchLocationWithRetry();
-}
+    // Initialize the search box for user input
+    const input = document.getElementById("searchBox");
+    const searchBox = new google.maps.places.SearchBox(input);
 
-// Function to attempt fetching location with retries if necessary
-function fetchLocationWithRetry(retryCount = 0) {
-    if (navigator.geolocation) {
-        const options = {
-            enableHighAccuracy: true,
-            timeout: 20000,  // Extended timeout for better accuracy
-            maximumAge: 0,
-        };
+    // Bias the SearchBox results towards current map's viewport
+    map.addListener("bounds_changed", () => {
+        searchBox.setBounds(map.getBounds());
+    });
 
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                handleSuccessfulLocation(position, retryCount);
-            },
-            (error) => {
-                handleLocationError(error, retryCount);
-            },
-            options
-        );
-    } else {
-        alert("Geolocation is not supported by your browser.");
-        useFallbackLocation();
-    }
-}
+    // Listen for user selection in the search box
+    searchBox.addListener("places_changed", () => {
+        const places = searchBox.getPlaces();
 
-// Handle successful location retrieval
-function handleSuccessfulLocation(position, retryCount) {
-    const { latitude, longitude, accuracy } = position.coords;
+        if (places.length === 0) {
+            return;
+        }
 
-    // Display marker for any initial location
-    userLocation = { lat: latitude, lng: longitude };
-    if (retryCount === 0 || accuracy <= 50) {
-        // Set center and add marker if location is accurate enough or on the first try
-        map.setCenter(userLocation);
-        new google.maps.Marker({
-            position: userLocation,
+        // Clear any previous markers
+        if (marker) {
+            marker.setMap(null);
+        }
+
+        // Get the first place from the list of places
+        const place = places[0];
+
+        // Create a marker at the selected location
+        marker = new google.maps.Marker({
             map: map,
-            title: "Your Location",
+            position: place.geometry.location,
+            title: place.name,
         });
 
-        // Save the location for future fallback
-        localStorage.setItem("lastKnownLocation", JSON.stringify(userLocation));
-    } else if (retryCount < retryLimit) {
-        // Retry if accuracy is still high
-        fetchLocationWithRetry(retryCount + 1);
-    }
-}
-
-// Handle errors and retry if possible
-function handleLocationError(error, retryCount) {
-    switch (error.code) {
-        case error.PERMISSION_DENIED:
-            alert("Location permission denied. Please enable location access.");
-            break;
-        case error.POSITION_UNAVAILABLE:
-            alert("Location unavailable. Retrying...");
-            if (retryCount < retryLimit) fetchLocationWithRetry(retryCount + 1);
-            break;
-        case error.TIMEOUT:
-            alert("Location request timed out. Retrying...");
-            if (retryCount < retryLimit) fetchLocationWithRetry(retryCount + 1);
-            break;
-        default:
-            alert("An unknown error occurred.");
-            useFallbackLocation();
-    }
-}
-
-// Fallback location if geolocation is not available or accurate
-function useFallbackLocation() {
-    const savedLocation = localStorage.getItem("lastKnownLocation");
-    if (savedLocation) {
-        userLocation = JSON.parse(savedLocation);
-    } else {
-        userLocation = { lat: 20.5937, lng: 78.9629 }; // Default fallback location
-    }
-
-    map.setCenter(userLocation);
-    new google.maps.Marker({
-        position: userLocation,
-        map: map,
-        title: "Fallback Location",
+        // Center the map on the selected location
+        map.setCenter(place.geometry.location);
+        map.setZoom(15);
     });
 }
 
-// Add event listener to retry fetching location manually if needed
+// Event listener for "Show Certified Restrooms" button
 document.getElementById("find-Restrooms").addEventListener("click", () => {
-    if (userLocation) {
+    if (marker && marker.getPosition()) {
         const request = {
-            location: userLocation,
+            location: marker.getPosition(),
             radius: 1500, // Search within 1.5km
             type: "restroom",
         };
@@ -109,6 +59,7 @@ document.getElementById("find-Restrooms").addEventListener("click", () => {
         service.nearbySearch(request, (results, status) => {
             if (status === google.maps.places.PlacesServiceStatus.OK) {
                 results.forEach((place) => {
+                    // Show only certified restrooms based on rating and reviews
                     if (place.rating >= 4.0 && place.user_ratings_total >= 100) {
                         new google.maps.Marker({
                             position: place.geometry.location,
@@ -123,10 +74,10 @@ document.getElementById("find-Restrooms").addEventListener("click", () => {
                     }
                 });
             } else {
-                console.error("Nearby search failed: " + status);
+                console.error("Nearby search failed:", status);
             }
         });
     } else {
-        alert("Unable to fetch user location. Please allow location access.");
+        alert("Please enter and select a location.");
     }
 });
