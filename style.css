@@ -13,7 +13,10 @@ body {
     justify-content: center;
     height: 100vh;
     overflow: hidden;
+    user-select: none;
 }
+
+
 
 /* Map container styling */
 #map {
@@ -25,13 +28,14 @@ body {
 /* Search Box Styling */
 #searchBox {
     padding: 12px;
-    width: 230px;
+    width: 250px;
     border: none;
     background-color: #3e3b3b;
     border-radius: 30px;
     outline: none;
     color: white;
     margin-right: 15px;
+    /* margin-bottom: 5vh; */
 }
 
 /* Button styling */
@@ -40,8 +44,8 @@ body {
     font-size: 16px;
     cursor: pointer;
     border: none;
-    background-color: green;
-    color: white;
+    background-color: black;
+    color: white;;
     border-radius: 5px;
     margin-top: 10px;
 }
@@ -52,7 +56,7 @@ body {
 
 .show-direction button{
     padding: 5px;
-    background-color: green;
+    background-color: black;
     color: #ffffff;
     border: 1px solid white;
     border-radius: 11px;
@@ -60,12 +64,13 @@ body {
 
 .show-direction button:hover{
     background-color: #45a049;
+    cursor: pointer;
 
 }
 
 .logo{
     width: 200px;
-    height: 100px;
+    height: 80px;
     object-fit: contain;
     margin-right: 0;
 }
@@ -82,4 +87,5 @@ body {
     background-color: black;
     width: 100%;
     color: white;
+    height: 12%;
 }
