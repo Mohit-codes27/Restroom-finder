@@ -11,7 +11,32 @@
         <img class="logo" src="logonobg.png" alt="">
         <h1 class="heading">Find Nearby Certified Restrooms</h1>
         
+        <!-- Search Box for Entering Location --><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certified Restroom Finder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">
+        <img class="logo" src="logo2.png" alt="">
+        <h1 class="heading">Find A Restroom Certified By Parihar India</h1>
+        
         <!-- Search Box for Entering Location -->
+        <input id="searchBox" type="text" placeholder="Enter your location" />
+    </div>
+
+    <div id="map"></div>
+    <button id="find-Restrooms">Show Certified Restrooms</button>
+
+    <script src="script.js"></script>
+    <!-- Replace YOUR_API_KEY with your actual Google Maps API key -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1TQAp7v__P6i7KyTT1XhzOow7XqjgJ5Q&libraries=places&callback=initMap" async defer></script>
+</body>
+</html>
+
         <input id="searchBox" type="text" placeholder="Enter your location" />
     </div>
 
