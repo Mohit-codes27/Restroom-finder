@@ -45,7 +45,7 @@ body {
 /* Heading styling */
 .heading {
     margin-left: 20px;
-    font-size: 18px;
+    font-size: 25px;
 }
 
 /* Map container styling */
@@ -66,6 +66,11 @@ body {
     color: white;
     margin-right: 15px;
 }
+
+#searchBox:focus{
+    border: 1px solid white;
+}
+
 
 /* Button styling */
 #find-Restrooms {
